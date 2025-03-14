@@ -31,28 +31,26 @@ def summarize(doc: FileStorage | BufferedReader, sections: list[int] | None = No
         "voto": simplify(summaries["voto"]),
         "decisao": simplify(summaries["decisao"]),
     }
-    result = f"""{simplified['cabecalho']}
 
-# Relatório
+    result = {
+        "cabecalho": simplified["cabecalho"],
+        "relatorio": {
+            "text": simplified["relatorio"][0],
+            "score": simplified["relatorio"][1],
+            "ratio": simplified["relatorio"][2],
+        },
+        "voto": {
+            "text": simplified["voto"][0],
+            "score": simplified["voto"][1],
+            "ratio": simplified["voto"][2],
+        },
+        "decisao": {
+            "text": simplified["decisao"][0],
+            "score": simplified["decisao"][1],
+            "ratio": simplified["decisao"][2],
+        }
+    }
 
-{simplified['relatorio'][0]}
-
-# Voto
-
-{simplified['voto'][0]}
-
-# Decisão
-
-{simplified['decisao'][0]}
-
----
-
-Nota de simplificação:
-
-* Relatório: {simplified['relatorio'][1]}, {simplified['relatorio'][2]:.2f}% simplificado
-* Voto: {simplified['voto'][1]}, {simplified['voto'][2]:.2f}% simplificado
-* Decisão: {simplified['decisao'][1]}, {simplified['decisao'][2]:.2f}% simplificado
-"""
     return result
 
 app = Flask(__name__)

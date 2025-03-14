@@ -1,3 +1,5 @@
+import datetime
+import json
 from pathlib import Path
 import time
 import pandas as pd
@@ -21,10 +23,12 @@ def from_csv(file_path: str | Path) -> pd.DataFrame:
 if __name__ == "__main__":
     dataset_path = BASE_DIR / sys.argv[1]
     results_path = BASE_DIR / "results"
+    result_path = results_path / str(datetime.datetime.now(datetime.UTC))
     documents_dir = BASE_DIR / "documentos" / "acordaos"
 
     if not results_path.exists():
         results_path.mkdir()
+    result_path.mkdir()
 
     acordaos = from_csv(dataset_path).iterrows()
 
@@ -34,8 +38,9 @@ if __name__ == "__main__":
         a = time.monotonic()
         print(f"Processing {file_path}.", end=" ")
         result = simplificar_acordao(file_path, sections)
-        with open(results_path / f"{file_path.stem}.txt", "w") as f:
-            f.write(result)
+        for step in result:
+            with open(result_path / f"{file_path.stem}_{step}.txt", "w") as f:
+                f.write(json.dumps(result))
         b = time.monotonic()
         with open(results_path / f"{file_path.stem}_time.txt", "w") as f:
             f.write(f"Time: {(b - a) / 60:.2f} minutes\n\n")
