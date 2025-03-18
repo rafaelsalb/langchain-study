@@ -39,8 +39,8 @@ if __name__ == "__main__":
         print(f"Processing {file_path}.", end=" ")
         result = simplificar_acordao(file_path, sections)
         for step in result:
-            with open(result_path / f"{file_path.stem}_{step}.txt", "w") as f:
-                f.write(json.dumps(result))
+            with open(result_path / f"{file_path.stem}_{step}.txt", "w", encoding="utf-8") as f:
+                json.dump(result[step], f, ensure_ascii=False)
         b = time.monotonic()
         with open(results_path / f"{file_path.stem}_time.txt", "w") as f:
             f.write(f"Time: {(b - a) / 60:.2f} minutes\n\n")
